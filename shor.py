@@ -54,7 +54,6 @@ def extract():
                 print("Possible factors: %i, %i" % (q1,q2))
                 return True
                 
-    
     print("Algorithm unsuccessful, trying again")
     return False
 

@@ -6,9 +6,10 @@ from math import sqrt, cos, pi, acos, asin
 
 n = 4
 N = 2**n
+r = 2 # number of expected solutions
 
 def f(b):
-    return 1 if b == (0,1,1,0) else 0
+    return 1 if b == (0,1,1,0) or b == (1,1,1,0) else 0
 
 zeroes = n*(0,)
 
@@ -48,8 +49,8 @@ psi0 = Hn * zero * ancilla
 
 # Grover iteration
 
-alpha = asin(1/sqrt(N))
-beta = acos(1/sqrt(N))
+alpha = asin(sqrt(r/N))
+beta = acos(sqrt(r/N))
 
 nsteps = round(beta / (2*alpha))
 napprox = round((pi / 4) * sqrt(N))
