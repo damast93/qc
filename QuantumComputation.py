@@ -151,6 +151,13 @@ class QOperator():
             return self.after(b)
         else:
             return self.apply(b)
+        
+    def __pow__(self, n):
+        assert isinstance(n,int)
+        acc = QOperator(lambda t: ket(*t)) # Identity
+        for i in range(n):
+            acc = self * acc
+        return acc
     
     def at(self, *indices):
         def apply(tfull):

@@ -1,3 +1,5 @@
+
+
 import QuantumComputation as qc
 from QuantumComputation import ket
 
@@ -75,16 +77,26 @@ CX = J(0).at(1) * E * J(0).at(1)
 SWAP = CX * CX.at(1,0) * CX
 
 # J-process
+
 alpha = 2
+beta = 0.53
 psi = 0.6 * ket(0) + 0.8*ket(1)
-entangled = E * (psi * plus)
 
-# Measure in B(alpha)
+graph = E.at(0,1) * E.at(1,2) * (psi * plus * plus)
+
 def M(s, i, alpha):
-    t = J(alpha).at(i) * s
-    res = t.measure([i])
-    (ret,) = t.sample([i])
-    return ret, Jinv(alpha).at(i) * res
+    pre = J(alpha).at(i) * s
+    post = pre.measure([i])
+    (s,) = post.sample([i])
+    ret = Jinv(alpha).at(i) * post
+    return s, ret
 
-# Measure first qubit
-(s0, ret) = M(entangled, 0, alpha)
+s1, stage1 = M(graph, 0, alpha)
+s2, stage2 = M(stage1, 1, (-1)**s1 * beta)
+
+postprocess = X**s2 * stage2.discard([0,1])
+
+aim = J(beta) * J(alpha) * psi
+
+print(aim.dist())
+print(postprocess.dist())
